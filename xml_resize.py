@@ -3,6 +3,7 @@ import glob
 import xml.etree.ElementTree as ET
 
 
+# changing xml parameters
 def xml(path, scale):
     for xml_file in glob.glob(path + '/*.xml'):
         print(xml_file)
@@ -32,4 +33,4 @@ def main():
 
 
 main()
-print('Successfully scaled xml')
+print('Successfully scaled all xml')
