@@ -40,9 +40,9 @@ def main():
     print('Calling script with: ')
     print(f'scale = {args.scale}')
     print(f'path = {image_path}')
-    # for xml_file in glob.glob(image_path + '/*.xml'):
-    #     formal_xml(xml_file, args.scale)
-    # print('Successfully scaled all xml')
+    for xml_file in glob.glob(image_path + '/*.xml'):
+        formal_xml(xml_file, args.scale)
+    print('Successfully scaled all xml')
 
 
 main()
