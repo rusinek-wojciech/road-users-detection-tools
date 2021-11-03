@@ -1,6 +1,6 @@
+import argparse
 import os
 import glob
-import sys
 import xml.etree.ElementTree as ET
 
 
@@ -27,17 +27,22 @@ def formal_xml(xml_file, scale):
     tree.write(xml_file)
 
 
+def args_input():
+    parser = argparse.ArgumentParser(description="Give scale and folder to format xml")
+    parser.add_argument("-sc", "--scale", default=1.0, help="Specify used scale")
+    parser.add_argument("-f", "--folder", default="images", help="Specify folder from runnable")
+    return parser.parse_args()
+
+
 def main():
-    args = sys.argv
-    scale = float(args[1])
-    folder = str(args[2])
-    image_path = os.path.join(os.getcwd(), folder)
+    args = args_input()
+    image_path = os.path.join(os.getcwd(), args.folder)
     print('Calling script with: ')
-    print(f'scale = {scale}')
+    print(f'scale = {args.scale}')
     print(f'path = {image_path}')
-    for xml_file in glob.glob(image_path + '/*.xml'):
-        formal_xml(xml_file, scale)
-    print('Successfully scaled all xml')
+    # for xml_file in glob.glob(image_path + '/*.xml'):
+    #     formal_xml(xml_file, args.scale)
+    # print('Successfully scaled all xml')
 
 
 main()

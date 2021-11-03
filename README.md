@@ -2,5 +2,5 @@
 
 List of files
 
-- **xml_resize** - reformat all xml files in folder with given scale
+- **xml_resize** - reformat all xml files in folder with given scale, program args: [--scale, --folder]
 
