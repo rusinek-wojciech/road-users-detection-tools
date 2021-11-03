@@ -1,5 +1,6 @@
 import os
 import glob
+import sys
 import xml.etree.ElementTree as ET
 
 
@@ -27,11 +28,17 @@ def formal_xml(xml_file, scale):
 
 
 def main():
-    image_path = os.path.join(os.getcwd(), 'images')
-    scale = 0.5
+    args = sys.argv
+    scale = float(args[1])
+    folder = str(args[2])
+    image_path = os.path.join(os.getcwd(), folder)
+    print('Calling script with: ')
+    print(f'scale = {scale}')
+    print(f'path = {image_path}')
     for xml_file in glob.glob(image_path + '/*.xml'):
         formal_xml(xml_file, scale)
+    print('Successfully scaled all xml')
 
 
 main()
-print('Successfully scaled all xml')
+
