@@ -4,32 +4,40 @@ import os
 import glob
 
 
-def scale_image(image_file, scale: float):
+def resize_image(image_file, size):
     image = Image.open(image_file)
     print(image_file)
-    x, y = image.size
-    new_size = (int(x * scale), int(y * scale))
-    new_image = image.resize(new_size)
+    new_image = image.resize(size)
     new_image.save(image_file)
 
 
 def args_input():
-    parser = argparse.ArgumentParser(description="Give scale and folder to format image")
-    parser.add_argument("-sc", "--scale", default=1.0, help="Specify used scale")
+    parser = argparse.ArgumentParser(description="Give sizes and folder to format image")
     parser.add_argument("-f", "--folder", default="images", help="Specify folder from runnable")
+    parser.add_argument("-wi", "--width", help="Specify width")
+    parser.add_argument("-he", "--height", help="Specify height")
     return parser.parse_args()
 
 
 def main():
     args = args_input()
+    width = int(args.width)
+    height = int(args.height)
+
     image_path = os.path.join(os.getcwd(), args.folder)
     print('Calling script with: ')
-    print(f'scale = {args.scale}')
+    print(f'width = {width}px')
+    print(f'height = {height}px')
     print(f'path = {image_path}')
-    for image_file in glob.glob(image_path + '/*.jpg'):
-        scale_image(image_file, float(args.scale))
-    print('Successfully scaled all images')
+
+    images = glob.glob(image_path + '/*.jpg')
+    length = len(images)
+    if length == 0:
+        raise Exception("No files provided")
+
+    for image_file in images:
+        resize_image(image_file, (width, height))
+    print(f'Successfully scaled {length} images')
 
 
 main()
-
