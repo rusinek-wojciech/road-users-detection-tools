@@ -2,5 +2,7 @@
 
 List of files
 
-- **xml_resize** - reformat all xml files in folder with given scale, program args: [--scale, --folder]
+- **xml_resize** - reformat all xml files in folder with given size, program args: [--width, --height, --folder]
+- **image_resize** - reformat all image files in folder with given size, program args: [--width, --height, --folder]
+
 
