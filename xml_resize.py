@@ -4,8 +4,7 @@ import glob
 import xml.etree.ElementTree as ET
 
 
-# changing xml file parameters
-def formal_xml(xml_file, scale):
+def formal_xml(xml_file, new_width: int, new_height: int):
     print(xml_file)
     tree = ET.parse(xml_file)
     root = tree.getroot()
@@ -18,31 +17,46 @@ def formal_xml(xml_file, scale):
     ymax = bndbox.find('ymax')
     width = size.find('width')
     height = size.find('height')
-    xmin.text = str(int(int(xmin.text) * scale))
-    ymin.text = str(int(int(ymin.text) * scale))
-    xmax.text = str(int(int(xmax.text) * scale))
-    ymax.text = str(int(int(ymax.text) * scale))
-    width.text = str(int(int(width.text) * scale))
-    height.text = str(int(int(height.text) * scale))
+
+    x_scale = new_width / int(width.text)
+    y_scale = new_height / int(height.text)
+
+    xmin.text = str(int(int(xmin.text) * x_scale))
+    ymin.text = str(int(int(ymin.text) * y_scale))
+    xmax.text = str(int(int(xmax.text) * x_scale))
+    ymax.text = str(int(int(ymax.text) * y_scale))
+    width.text = str(new_width)
+    height.text = str(new_height)
     tree.write(xml_file)
 
 
 def args_input():
     parser = argparse.ArgumentParser(description="Give scale and folder to format xml")
-    parser.add_argument("-sc", "--scale", default=1.0, help="Specify used scale")
     parser.add_argument("-f", "--folder", default="images", help="Specify folder from runnable")
+    parser.add_argument("-wi", "--width", help="Specify width")
+    parser.add_argument("-he", "--height", help="Specify height")
     return parser.parse_args()
 
 
 def main():
     args = args_input()
+    width = int(args.width)
+    height = int(args.height)
+
     image_path = os.path.join(os.getcwd(), args.folder)
     print('Calling script with: ')
-    print(f'scale = {args.scale}')
+    print(f'width = {width}px')
+    print(f'height = {height}px')
     print(f'path = {image_path}')
-    for xml_file in glob.glob(image_path + '/*.xml'):
-        formal_xml(xml_file, args.scale)
-    print('Successfully scaled all xml')
+
+    xmls = glob.glob(image_path + '/*.xml')
+    length = len(xmls)
+    if length == 0:
+        raise Exception("No files provided")
+
+    for xml_file in xmls:
+        formal_xml(xml_file, width, height)
+    print(f'Successfully scaled {length} xml')
 
 
 main()
