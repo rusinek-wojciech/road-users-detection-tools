@@ -9,24 +9,24 @@ def formal_xml(xml_file, new_width: int, new_height: int):
     tree = ET.parse(xml_file)
     root = tree.getroot()
     size = root.find('size')
-    object = root.find('object')
-    bndbox = object.find('bndbox')
-    xmin = bndbox.find('xmin')
-    ymin = bndbox.find('ymin')
-    xmax = bndbox.find('xmax')
-    ymax = bndbox.find('ymax')
     width = size.find('width')
     height = size.find('height')
-
     x_scale = new_width / int(width.text)
     y_scale = new_height / int(height.text)
-
-    xmin.text = str(int(int(xmin.text) * x_scale))
-    ymin.text = str(int(int(ymin.text) * y_scale))
-    xmax.text = str(int(int(xmax.text) * x_scale))
-    ymax.text = str(int(int(ymax.text) * y_scale))
     width.text = str(new_width)
     height.text = str(new_height)
+    object = root.findall('object')
+    for obj in object:
+        bndbox = obj.find('bndbox')
+        xmin = bndbox.find('xmin')
+        ymin = bndbox.find('ymin')
+        xmax = bndbox.find('xmax')
+        ymax = bndbox.find('ymax')
+        xmin.text = str(int(int(xmin.text) * x_scale))
+        ymin.text = str(int(int(ymin.text) * y_scale))
+        xmax.text = str(int(int(xmax.text) * x_scale))
+        ymax.text = str(int(int(ymax.text) * y_scale))
+    
     tree.write(xml_file)
 
 
