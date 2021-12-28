@@ -11,10 +11,25 @@ def formal_xml(xml_file, new_width: int, new_height: int):
     size = root.find('size')
     width = size.find('width')
     height = size.find('height')
-    x_scale = new_width / int(width.text)
-    y_scale = new_height / int(height.text)
-    width.text = str(new_width)
-    height.text = str(new_height)
+
+    width_num = int(width.text)
+    height_num = int(height.text)
+
+    x_scale = width_num / new_width
+    y_scale = height_num / new_height
+
+    if x_scale >= y_scale:
+        new_width_num = new_width
+        new_height_num = int(height_num / x_scale)
+        scale = 1.0 / x_scale
+    else:
+        new_width_num = int(width_num / y_scale)
+        new_height_num = new_height_num
+        scale = 1.0 / y_scale
+
+
+    width.text = str(new_width_num)
+    height.text = str(new_height_num)
     object = root.findall('object')
     for obj in object:
         bndbox = obj.find('bndbox')
@@ -22,10 +37,10 @@ def formal_xml(xml_file, new_width: int, new_height: int):
         ymin = bndbox.find('ymin')
         xmax = bndbox.find('xmax')
         ymax = bndbox.find('ymax')
-        xmin.text = str(int(int(xmin.text) * x_scale))
-        ymin.text = str(int(int(ymin.text) * y_scale))
-        xmax.text = str(int(int(xmax.text) * x_scale))
-        ymax.text = str(int(int(ymax.text) * y_scale))
+        xmin.text = str(int(int(xmin.text) * scale))
+        ymin.text = str(int(int(ymin.text) * scale))
+        xmax.text = str(int(int(xmax.text) * scale))
+        ymax.text = str(int(int(ymax.text) * scale))
     
     tree.write(xml_file)
 
