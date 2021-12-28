@@ -5,7 +5,7 @@ from _XML import XML
 
 
 def format_xml(xml_file: str, requested_width: int, requested_height: int):
-    tree = XML.get_tree(xml_file)
+    tree = XML.parse_tree(xml_file)
     original_width = int(tree["width"].text)
     original_height = int(tree["height"].text)
     x_scale = original_width / requested_width
