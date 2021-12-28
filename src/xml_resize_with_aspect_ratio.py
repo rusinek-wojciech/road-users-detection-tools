@@ -2,9 +2,14 @@ import argparse
 import os
 import glob
 import xml.etree.ElementTree as ET
+import math
 
 
-def formal_xml(xml_file, new_width: int, new_height: int):
+def to_int(x: float):
+    return int(math.ceil(x))
+
+
+def format_xml(xml_file, new_width: int, new_height: int):
     print(xml_file)
     tree = ET.parse(xml_file)
     root = tree.getroot()
@@ -15,18 +20,17 @@ def formal_xml(xml_file, new_width: int, new_height: int):
     width_num = int(width.text)
     height_num = int(height.text)
 
-    x_scale = width_num / new_width
-    y_scale = height_num / new_height
+    x_scale = new_width / width_num
+    y_scale = new_height / height_num
 
     if x_scale >= y_scale:
         new_width_num = new_width
-        new_height_num = int(height_num / x_scale)
-        scale = 1.0 / x_scale
+        new_height_num = to_int(height_num * x_scale)
+        scale = x_scale
     else:
-        new_width_num = int(width_num / y_scale)
-        new_height_num = new_height_num
-        scale = 1.0 / y_scale
-
+        new_width_num = to_int(width_num * y_scale)
+        new_height_num = new_height
+        scale = y_scale
 
     width.text = str(new_width_num)
     height.text = str(new_height_num)
@@ -37,11 +41,11 @@ def formal_xml(xml_file, new_width: int, new_height: int):
         ymin = bndbox.find('ymin')
         xmax = bndbox.find('xmax')
         ymax = bndbox.find('ymax')
-        xmin.text = str(int(int(xmin.text) * scale))
-        ymin.text = str(int(int(ymin.text) * scale))
-        xmax.text = str(int(int(xmax.text) * scale))
-        ymax.text = str(int(int(ymax.text) * scale))
-    
+        xmin.text = str(to_int(int(xmin.text) * scale))
+        ymin.text = str(to_int(int(ymin.text) * scale))
+        xmax.text = str(to_int(int(xmax.text) * scale))
+        ymax.text = str(to_int(int(ymax.text) * scale))
+
     tree.write(xml_file)
 
 
@@ -70,9 +74,8 @@ def main():
         raise Exception("No files provided")
 
     for xml_file in xmls:
-        formal_xml(xml_file, width, height)
+        format_xml(xml_file, width, height)
     print(f'Successfully scaled {length} xml')
 
 
 main()
-
