@@ -7,16 +7,10 @@ import xml.etree.ElementTree as ET
 def formal_xml(xml_file):
     tree = ET.parse(xml_file)
     root = tree.getroot()
-    filename = root.find('filename')
-    file_image = filename.text
+    file_image = root.find('filename').text
     file_xml = os.path.split(xml_file)
-    xml_n = file_xml[-1].split(".")[0]
-    if file_image.split(".")[0] != xml_n:
-        print('renaming: ', file_image, file_xml)
-        filename.text = xml_n + '.jpg'
-
-    tree.write(xml_file)
-
+    if file_image.split(".")[0] != file_xml[-1].split(".")[0]:
+        print(file_image, file_xml)
 
 
 def args_input():
