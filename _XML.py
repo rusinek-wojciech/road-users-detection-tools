@@ -15,7 +15,7 @@ class XML:
         }
 
     @staticmethod
-    def get_tree(xml_file: str):
+    def parse_tree(xml_file: str):
         tree = ElementTree.parse(xml_file)
         root = tree.getroot()
         size = root.find("size")
@@ -23,5 +23,6 @@ class XML:
             "tree": tree,
             "width": size.find("width"),
             "height": size.find("height"),
-            "objects": [XML.get_box(obj_elem) for obj_elem in root.findall("object")]
+            "objects": [XML.get_box(obj_elem) for obj_elem in root.findall("object")],
+            "filename": root.find('filename'),
         }

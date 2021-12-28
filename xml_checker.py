@@ -1,39 +1,37 @@
 import argparse
 import os
 import glob
-import xml.etree.ElementTree as ET
+from _XML import XML
 
 
-def formal_xml(xml_file):
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
-    file_image = root.find('filename').text
-    file_xml = os.path.split(xml_file)
-    if file_image.split(".")[0] != file_xml[-1].split(".")[0]:
-        print(file_image, file_xml)
+def check_xml(xml_file: str):
+    tree = XML.parse_tree(xml_file)
+    file_image = tree['filename'].text
+    file_xml = os.path.split(xml_file)[-1]
+    file_image_name = file_image.split(".")[0]
+    file_xml_name = file_xml.split(".")[0]
+    if file_image_name != file_xml_name:
+        print(f"{file_xml} has invalid image: {file_image}")
 
 
 def args_input():
-    parser = argparse.ArgumentParser(description="Give scale and folder to format xml with stretch")
+    parser = argparse.ArgumentParser(description="Lists all incorrect 'filename' sections in xml")
     parser.add_argument("-f", "--folder", default="images", help="Specify folder from runnable")
     return parser.parse_args()
 
 
 def main():
     args = args_input()
-
-    image_path = os.path.join(os.getcwd(), args.folder)
-    print('Calling script with: ')
-    print(f'path = {image_path}')
-
-    xmls = glob.glob(image_path + '/*.xml')
-    length = len(xmls)
+    path = os.path.join(os.getcwd(), args.folder)
+    xml_files = glob.glob(path + '/*.xml')
+    length = len(xml_files)
     if length == 0:
         raise Exception("No files provided")
-
-    for xml_file in xmls:
-        formal_xml(xml_file)
-    print(f'Successfully checked {length} xml')
+    print(f'Calling script with for {length} files: ')
+    print(f'path = {path}')
+    for xml_file in xml_files:
+        check_xml(xml_file)
+    print(f'Successfully checked xml\'s')
 
 
 main()
