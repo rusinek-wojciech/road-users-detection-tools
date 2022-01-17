@@ -12,6 +12,7 @@ class XML:
             "ymin": bndbox_elem.find("ymin"),
             "xmax": bndbox_elem.find("xmax"),
             "ymax": bndbox_elem.find("ymax"),
+            "name": obj_elem.find('name'),
         }
 
     @staticmethod
