@@ -1,4 +1,4 @@
-## Road traffic participation recognition
+## Road users detection tools
 
 List of files
 - **dataset_renamer** - renames all files in dataset, args [--folder, --result, --name]
